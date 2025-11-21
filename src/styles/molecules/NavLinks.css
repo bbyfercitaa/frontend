@@ -1,0 +1,10 @@
+.nav-greeting {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  padding: 0.5rem;
+  color: #198754;
+  font-weight: 500;
+  background-color: #e8f5e9;
+  border-radius: 4px;
+}

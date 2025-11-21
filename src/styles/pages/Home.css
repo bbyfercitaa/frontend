@@ -1,0 +1,7 @@
+.divider-line {
+  width: 100%;
+  height: 30px;  /* Línea más gruesa */
+  background-color: #4DB6AC;
+  margin: 20px 0;  /* Más separación arriba y abajo */
+  padding: 0;
+}
