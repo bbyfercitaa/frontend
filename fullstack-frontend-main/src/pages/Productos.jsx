@@ -5,37 +5,48 @@ import '../styles/pages/Productos.css';
 import { productosAPI } from '../data/api';
 
 function Productos() {
-  const [maxPrice, setMaxPrice] = useState(2000000); // Precio más alto por defecto
+  const [maxPrice, setMaxPrice] = useState(2000000);
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Cargar productos desde la API
   useEffect(() => {
     const cargarProductos = async () => {
       try {
         setLoading(true);
+        console.log('🔄 Intentando cargar productos...');
+        
         const productosAPI_data = await productosAPI.getAll();
-        console.log('🔍 Datos recibidos del backend:', productosAPI_data);
+        console.log('✅ Productos recibidos:', productosAPI_data);
+        
         // Mapear los productos del backend al formato del frontend
-        const productosMapeados = productosAPI_data.map(producto => ({
-          id: producto.id,
-          name: producto.nombre || producto.nombre_producto,
-          price: producto.precio,
-          description: producto.descripcion || producto.descripcion_producto,
-          image: producto.url, // imagen
-          link: producto.link_mercado, // link
-          category: producto.categoria
-        }));
+        const productosMapeados = productosAPI_data.map(producto => {
+          console.log('📦 Producto individual:', producto);
+          return {
+            id: producto.id,
+            name: producto.nombre_producto || producto.nombre,
+            price: producto.precio,
+            description: producto.descripcion_producto || producto.descripcion,
+            image: producto.url_imagen || producto.url,
+            link: producto.link_mercado || '#',
+            category: producto.categoria
+          };
+        });
+        
+        console.log('🎯 Productos mapeados:', productosMapeados);
         setProductos(productosMapeados);
         setError(null);
       } catch (err) {
-        console.error('Error al cargar productos:', err);
-        console.log('🔄 Cargando datos de ejemplo mientras se configura el backend...');
-        // Fallback a datos estáticos si falla la API
+        console.error('❌ Error completo:', err);
+        console.error('❌ Error message:', err.message);
+        console.error('❌ Error stack:', err.stack);
+        
+        setError(`Error al conectar con el servidor: ${err.message}`);
+        
+        // Fallback a datos estáticos
+        console.log('🔄 Cargando datos de ejemplo...');
         const { products } = await import('../data/products.js');
         setProductos(products);
-        setError(null); // No mostrar error, usar datos de ejemplo silenciosamente
       } finally {
         setLoading(false);
       }
@@ -45,7 +56,7 @@ function Productos() {
   }, []);
 
   const handlePriceChange = (e) => {
-    const value = e.target.value.replace(/\D/g, ''); // Solo permite números
+    const value = e.target.value.replace(/\D/g, '');
     setMaxPrice(value === '' ? 0 : Number(value));
   };
 
@@ -60,7 +71,10 @@ function Productos() {
           <Spinner animation="border" role="status" variant="primary">
             <span className="visually-hidden">Cargando productos...</span>
           </Spinner>
-          <p className="mt-3">Cargando productos desde el servidor...</p>
+          <p className="mt-3">Conectando con el servidor...</p>
+          <small className="text-muted">
+            https://queledoy-backend-7ejz.onrender.com
+          </small>
         </Container>
       </div>
     );
@@ -73,8 +87,13 @@ function Productos() {
         
         {error && (
           <Alert variant="warning" className="mb-4">
-            <Alert.Heading>Aviso</Alert.Heading>
-            {error}
+            <Alert.Heading>⚠️ Aviso de Conexión</Alert.Heading>
+            <p>{error}</p>
+            <hr />
+            <p className="mb-0">
+              <strong>Mostrando productos de ejemplo.</strong> 
+              Verifica que tu backend esté funcionando correctamente.
+            </p>
           </Alert>
         )}
         
@@ -108,7 +127,9 @@ function Productos() {
                 <h4>🛒 No hay productos disponibles</h4>
                 <p>Aún no se han agregado productos a la base de datos.</p>
                 <small className="text-muted">
-                  Los productos se mostrarán aquí una vez que se agreguen al backend.
+                  Agrega productos desde tu backend en: 
+                  <br />
+                  POST https://queledoy-backend-7ejz.onrender.com/api/v1/productos
                 </small>
               </Alert>
             </Col>
