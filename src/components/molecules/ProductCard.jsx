@@ -1,44 +1,40 @@
-import { Card } from 'react-bootstrap';
-import ViewMoreButton from '../atoms/ViewMoreButton';
+import React from 'react';
+import { Card, Button } from 'react-bootstrap';
 import '../../styles/molecules/ProductCard.css';
 
 const ProductCard = ({ product }) => {
-  // Compatibilidad entre datos del backend y datos estáticos
-  const productData = {
-    id: product.id,
-    name: product.nombre || product.name || product.nombre_producto,
-    description: product.descripcion || product.description || product.descripcion_producto,
-    price: product.precio || product.price,
-    image: product.url_producto || product.url_imagen || product.url || product.image || '/placeholder-image.jpg',
-    link: product.link_mercado || product.link || '#'
+  const openExternal = (url) => {
+    if (!url) return; // o mostrar feedback
+    const normalized = url.startsWith('http') ? url : `https://${url}`;
+    window.open(normalized, '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <Card className="product-card">
+    <Card className="h-100">
       <div className="product-image-container">
         <Card.Img 
           variant="top" 
-          src={productData.image} 
-          alt={productData.name}
+          src={product.url_producto || product.url_imagen || product.url || product.image || '/placeholder-image.jpg'}
+          alt={product.nombre || product.name || product.nombre_producto}
           loading="lazy"
           onError={(e) => {
             e.target.src = '/placeholder-image.jpg'; // Imagen por defecto si falla
           }}
         />
       </div>
-      <Card.Body className="text-center">
-        <Card.Title className="h4 mb-3">{productData.name}</Card.Title>
-        <Card.Text className="text-muted">{productData.description}</Card.Text>
-        {productData.price && (
-          <div className="mb-3">
-            <strong className="text-primary fs-5">
-              ${typeof productData.price === 'number' 
-                ? productData.price.toLocaleString() 
-                : productData.price}
-            </strong>
-          </div>
-        )}
-        <ViewMoreButton link={productData.link} />
+      <Card.Body>
+        <Card.Title>{product.nombre || product.name || product.nombre_producto}</Card.Title>
+        <Card.Text>{product.descripcion || product.description || product.descripcion_producto}</Card.Text>
+        <div className="d-flex justify-content-between align-items-center">
+          <span>{product.precio && `$${product.precio}`}</span>
+          <Button
+            variant="primary"
+            onClick={() => openExternal(product.link_mercado || product.link || '#')}
+            disabled={!product.link_mercado && !product.link}
+          >
+            Ver en Mercado Libre
+          </Button>
+        </div>
       </Card.Body>
     </Card>
   );
