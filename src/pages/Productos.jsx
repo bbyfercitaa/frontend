@@ -17,17 +17,11 @@ function Productos() {
         setLoading(true);
         const productosAPI_data = await productosAPI.getAll();
         console.log('🔍 Datos recibidos del backend:', productosAPI_data);
-        // Mapear los productos del backend al formato del frontend
-        const productosMapeados = productosAPI_data.map(producto => ({
-          id: producto.id,
-          name: producto.nombre || producto.nombre_producto,
-          price: producto.precio,
-          description: producto.descripcion || producto.descripcion_producto,
-          image: producto.url, // imagen
-          link: producto.link_mercado, // link
-          category: producto.categoria
-        }));
-        setProductos(productosMapeados);
+        // Los datos del backend ya vienen correctamente formateados desde el DTO
+        // ProductoSimpleDTO devuelve:
+        // - url_imagen: imagen (del placeholder si no hay imagen relacionada)
+        // - link_mercado: link a Mercado Libre
+        setProductos(productosAPI_data);
         setError(null);
       } catch (err) {
         console.error('Error al cargar productos:', err);
