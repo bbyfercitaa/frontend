@@ -38,6 +38,7 @@ const ProductCard = ({ product }) => {
     
     // URL de imagen con múltiples fallbacks
     image: product.url_imagen || 
+           product.imagenes?.imagen?.url ||
            product.image || 
            product.url_producto ||
            'https://via.placeholder.com/300x300?text=Sin+Imagen',
