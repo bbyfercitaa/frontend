@@ -8,7 +8,7 @@ const ViewMoreButton = ({ link }) => {
       rel="noopener noreferrer" 
       className="view-more"
     >
-      Ver en Mercado Libre
+      Ver donde comprar
     </a>
   );
 };
