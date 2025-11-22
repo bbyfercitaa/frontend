@@ -44,7 +44,6 @@ const ProductCard = ({ product }) => {
     
     // Link a Mercado Libre
     link: getValidUrl(
-      product.link_mercado || 
       product.link || 
       product.url
     ) || 'https://www.mercadolibre.cl',
