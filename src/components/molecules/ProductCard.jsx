@@ -1,22 +1,47 @@
-import { Card } from 'react-bootstrap';
+import { Card, Badge } from 'react-bootstrap';
+import { useState } from 'react';
 import ViewMoreButton from '../atoms/ViewMoreButton';
+import AddToListaButton from '../atoms/AddToListaButton';
 import '../../styles/molecules/ProductCard.css';
 
 const ProductCard = ({ product }) => {
-  console.log('🔍 Producto recibido en ProductCard:', product);
+  const [imageError, setImageError] = useState(false);
 
-  // Función para limpiar y validar URLs
-  const getValidUrl = (url) => {
-    if (!url) return null;
+  // Normalizar datos del producto
+  const productData = {
+    id: product.id,
+    nombre: product.nombre_producto || product.nombre || product.name || 'Producto sin nombre',
+    descripcion: product.descripcion_producto || product.descripcion || product.description || 'Sin descripción',
+    precio: product.precio || product.price || 0,
+    imagen: product.url_imagen || product.image || null,
+    link: product.link_mercado || product.link || product.url || '#',
+    categoria: product.categoria || product.category || 'General',
+    stock: product.stock || 0,
+    activo: product.activo ?? true,
+    destacado: product.destacado ?? false
+  };
+
+  // Imagen con fallback
+  const getImageUrl = () => {
+    if (imageError || !productData.imagen) {
+      return `https://via.placeholder.com/400x400/4DB6AC/FFFFFF?text=${encodeURIComponent(productData.nombre.substring(0, 20))}`;
+    }
+    return productData.imagen;
+  };
+
+  // Validar y limpiar URL
+  const getValidUrl = () => {
+    const url = productData.link;
+    if (!url || url === '#') return null;
     
-    // Si la URL no empieza con http, agregarla
+    // Si no tiene protocolo, agregarlo
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       return `https://${url}`;
     }
-    
     return url;
   };
 
+<<<<<<< HEAD
   // Mapeo robusto de datos del producto
   const productData = {
     id: product.id,
@@ -50,65 +75,100 @@ const ProductCard = ({ product }) => {
     
     // Categoría
     category: product.categoria || product.category || 'Sin categoría'
+=======
+  const handleImageError = () => {
+    setImageError(true);
+>>>>>>> 67eb31e (Agregando listas y roles)
   };
 
-  console.log('✅ Datos procesados del producto:', productData);
-
-  // Manejar error de carga de imagen
-  const handleImageError = (e) => {
-    console.error('❌ Error cargando imagen:', productData.image);
-    e.target.src = 'https://via.placeholder.com/300x300?text=Error+Cargando+Imagen';
-  };
-
-  // Manejar click en el botón (debugging)
-  const handleLinkClick = (e) => {
-    console.log('🔗 Link clickeado:', productData.link);
-    
-    // Verificar si el link es válido
-    if (!productData.link || 
-        productData.link === '#' || 
-        productData.link === 'https://www.mercadolibre.cl') {
-      console.warn('⚠️ Link inválido o por defecto');
-      alert('Este producto no tiene un link de Mercado Libre configurado');
-      e.preventDefault();
-    }
-  };
+  const validUrl = getValidUrl();
 
   return (
     <Card className="product-card">
+      {/* Badges superiores */}
+      <div className="product-badges">
+        {productData.destacado && (
+          <Badge bg="warning" className="badge-destacado">
+            ⭐ Destacado
+          </Badge>
+        )}
+        {!productData.activo && (
+          <Badge bg="danger" className="badge-inactivo">
+            No disponible
+          </Badge>
+        )}
+        {productData.stock === 0 && productData.activo && (
+          <Badge bg="secondary" className="badge-sin-stock">
+            Sin stock
+          </Badge>
+        )}
+      </div>
+
+      {/* Imagen del producto */}
       <div className="product-image-container">
         <Card.Img 
           variant="top" 
-          src={productData.image} 
-          alt={productData.name}
+          src={getImageUrl()} 
+          alt={productData.nombre}
           loading="lazy"
           onError={handleImageError}
+          className="product-image"
         />
       </div>
-      <Card.Body className="text-center">
-        <Card.Title className="h4 mb-3">{productData.name}</Card.Title>
-        <Card.Text className="text-muted">{productData.description}</Card.Text>
-        
-        {productData.price > 0 && (
-          <div className="mb-3">
-            <strong className="text-primary fs-5">
-              ${typeof productData.price === 'number' 
-                ? productData.price.toLocaleString('es-CL') 
-                : productData.price}
-            </strong>
-          </div>
-        )}
-        
-        <div onClick={handleLinkClick}>
-          <ViewMoreButton link={productData.link} />
+
+      {/* Contenido */}
+      <Card.Body className="product-card-body">
+        {/* Categoría */}
+        <div className="product-category">
+          <Badge bg="info" pill className="category-badge">
+            {productData.categoria}
+          </Badge>
         </div>
-        
-        {/* Badge de debugging (opcional, puedes quitarlo en producción) */}
-        {process.env.NODE_ENV === 'development' && (
-          <small className="text-muted d-block mt-2">
-            ID: {productData.id} | Cat: {productData.category}
-          </small>
-        )}
+
+        {/* Título */}
+        <Card.Title className="product-title" title={productData.nombre}>
+          {productData.nombre}
+        </Card.Title>
+
+        {/* Descripción */}
+        <Card.Text className="product-description">
+          {productData.descripcion.length > 100 
+            ? `${productData.descripcion.substring(0, 100)}...` 
+            : productData.descripcion}
+        </Card.Text>
+
+        {/* Precio y Stock */}
+        <div className="product-info">
+          {productData.precio > 0 && (
+            <div className="product-price">
+              <span className="price-label">Precio:</span>
+              <span className="price-value">
+                ${productData.precio.toLocaleString('es-CL')}
+              </span>
+            </div>
+          )}
+          {productData.stock > 0 && (
+            <div className="product-stock">
+              <span className="stock-icon">📦</span>
+              <span className="stock-value">{productData.stock} disponibles</span>
+            </div>
+          )}
+        </div>
+
+        {/* Botones de acción */}
+        <div className="product-actions">
+          {validUrl ? (
+            <ViewMoreButton link={validUrl} />
+          ) : (
+            <div className="no-link-message">
+              <small className="text-muted">Sin enlace disponible</small>
+            </div>
+          )}
+          
+          <div className="mt-2">
+            <AddToListaButton producto={productData} />
+          </div>
+        </div>
       </Card.Body>
     </Card>
   );
