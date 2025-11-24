@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { usuariosAPI } from '../data/api';
+import { usuariosAPI } from '../../data/api';
 
 const AuthContext = createContext(null);
 
@@ -61,7 +61,9 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     
     try {
+      console.log('Registrando usuario:', datosUsuario);
       const response = await usuariosAPI.register(datosUsuario);
+      console.log('Respuesta del registro:', response);
       
       const userData = {
         id: response.id,
@@ -71,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       };
 
       sessionStorage.setItem('user', JSON.stringify(userData));
-      sessionStorage.setItem('token', response.token || 'mock-token');
+      sessionStorage.setItem('token', response.token || 'usuario-' + response.id);
       
       setUser(userData);
       return { success: true };
@@ -79,6 +81,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       const errorMsg = err.message || 'Error al registrarse';
       setError(errorMsg);
+      console.error('Error en registro:', err);
       return { success: false, error: errorMsg };
     } finally {
       setLoading(false);
