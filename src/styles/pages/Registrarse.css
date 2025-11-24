@@ -1,0 +1,116 @@
+*{
+    box-sizing:border-box
+}
+
+body{
+    font-family:Inter,system-ui,Segoe UI,Roboto,Arial; 
+    background:var(--bg); 
+    color:#0f172a}
+
+.register-page{
+  min-height: calc(100vh - 120px);
+  display:flex;
+  align-items:center;   
+  justify-content:center;
+  padding:32px 16px;
+}
+
+.register-card{
+  width:100%;
+  max-width:520px;
+  background:var(--card);
+  border-radius:14px;
+  padding:28px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(15,23,42,0.04);
+}
+
+.register-card h1{
+  margin:0 0 10px 0;
+  font-size:22px;
+  color:#0b1220;
+}
+
+.alert{
+  background: #f10000;
+  color:var(--danger);
+  padding:8px 12px;
+  border-radius:8px;
+  margin-bottom:12px;
+  font-size:14px;
+  border:1px solid rgb(255, 0, 0);
+}
+
+.register-form .form-group{
+  margin-bottom:14px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.register-form label{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"]{
+  padding:10px 12px;
+  font-size:15px;
+  border-radius:10px;
+  border:1px solid rgba(15,23,42,0.08);
+  background:transparent;
+  outline:none;
+  transition:box-shadow .12s, border-color .12s;
+}
+
+.register-form input:focus{
+  box-shadow: 0 0 0 4px rgba(5,150,105,0.07);
+  border-color:var(--accent);
+}
+
+.form-row-two{
+  display:flex;
+  gap:12px;
+}
+
+.form-group.small{ flex:1 }
+
+.btn-register{
+  width:100%;
+  background:var(--accent);
+  color:white;
+  border:none;
+  padding:12px 14px;
+  border-radius:10px;
+  font-weight:600;
+  font-size:15px;
+  cursor:pointer;
+  transition:transform .06s ease, box-shadow .06s ease;
+  margin-top:6px;
+}
+
+.btn-register:hover{
+    transform:translateY(-1px); 
+    box-shadow:0 10px 26px rgba(5,150,105,0.12)
+}
+.btn-register:active{
+    transform:translateY(0)
+}
+
+.small-note{
+  margin-top:12px;
+  font-size:14px;
+  color:var(--muted);
+  text-align:center;
+}
+
+.link-small{ color:var(--accent); text-decoration:none; font-weight:600 }
+.link-small:hover{text-decoration:underline}
+
+/* Responsive */
+@media (max-width:600px){
+  .register-card{ padding:20px; border-radius:12px }
+  .form-row-two{ flex-direction:column; }
+}
