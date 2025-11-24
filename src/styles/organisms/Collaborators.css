@@ -1,0 +1,70 @@
+.collaborators {
+  padding: 4rem 0;
+  background-color: #fff;
+}
+
+.section-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: #4DB6AC;
+  margin: 1rem auto;
+}
+
+.collaborator-card {
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  background: white;
+  border-radius: 10px;
+  background: white;
+  border-radius: 10px;
+}
+
+.collaborator-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.collaborator-image {
+  max-width: 80%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(0);
+  transition: filter 0.3s ease;
+}
+
+.collaborator-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .collaborators {
+    padding: 2rem 0;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .collaborator-card {
+    height: 120px;
+    padding: 1.5rem;
+  }
+}

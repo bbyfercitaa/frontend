@@ -1,0 +1,225 @@
+/* Productos.css - Versión Mejorada */
+
+.productos-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 3rem 0;
+}
+
+.page-title {
+  color: white;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.page-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+/* Contenedor de filtros */
+.filters-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.search-input,
+.category-select,
+.price-input,
+.sort-select {
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.search-input:focus,
+.category-select:focus,
+.price-input:focus,
+.sort-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+}
+
+.clear-btn {
+  border-radius: 10px;
+  font-weight: 600;
+  height: 38px;
+}
+
+/* Contador de resultados */
+.results-count {
+  text-align: center;
+  font-weight: 600;
+  color: #7f8c8d;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+/* Alert de error */
+.error-alert {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Sin productos */
+.no-products {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.no-products-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-products h3 {
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.no-products p {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Grid responsive mejorado */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px;
+  }
+}
+
+/* Animaciones */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filters-container {
+  animation: slideDown 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+
+  .filters-container {
+    padding: 1.5rem;
+  }
+
+  .clear-btn {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .productos-page {
+    padding: 2rem 0;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+
+  .filters-container {
+    padding: 1rem;
+  }
+
+  .filter-label {
+    font-size: 0.85rem;
+  }
+
+  .results-count {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Transiciones suaves globales */
+.form-control,
+.form-select,
+.btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efecto hover en inputs */
+.form-control:hover:not(:focus),
+.form-select:hover:not(:focus) {
+  border-color: #b0b0b0;
+}
+
+/* Loading state para botones */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mejora de accesibilidad */
+.form-control:focus,
+.form-select:focus,
+.btn:focus {
+  outline: none;
+}
+
+/* Badge personalizado para filtros activos */
+.filter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #667eea;
+  color: white;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.filter-badge button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.filter-badge button:hover {
+  opacity: 0.8;
+}
