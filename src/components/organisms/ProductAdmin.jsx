@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Alert, Spinner, Badge } from 'react-bootstrap';
-import { productosAPI } from '../../../data/api';
+import { productosAPI } from '../../data/api';
 
 function ProductosAdmin({ onUpdate }) {
   const [productos, setProductos] = useState([]);
@@ -101,17 +101,17 @@ function ProductosAdmin({ onUpdate }) {
 
       if (editingProducto) {
         await productosAPI.update(editingProducto.id, productoData);
-        alert('Producto actualizado correctamente');
+        alert('✅ Producto actualizado correctamente');
       } else {
         await productosAPI.create(productoData);
-        alert('Producto creado correctamente');
+        alert('✅ Producto creado correctamente');
       }
 
       handleCloseModal();
       loadProductos();
       if (onUpdate) onUpdate();
     } catch (err) {
-      alert('Error al guardar el producto: ' + err.message);
+      alert('❌ Error al guardar el producto: ' + err.message);
       console.error(err);
     }
   };
@@ -123,12 +123,25 @@ function ProductosAdmin({ onUpdate }) {
 
     try {
       await productosAPI.delete(id);
-      alert('Producto eliminado correctamente');
+      alert('✅ Producto eliminado correctamente');
       loadProductos();
       if (onUpdate) onUpdate();
     } catch (err) {
-      alert('Error al eliminar el producto: ' + err.message);
+      alert('❌ Error al eliminar el producto: ' + err.message);
       console.error(err);
+    }
+  };
+
+  const toggleActivo = async (producto) => {
+    try {
+      await productosAPI.update(producto.id, {
+        ...producto,
+        activo: !producto.activo
+      });
+      loadProductos();
+      if (onUpdate) onUpdate();
+    } catch (err) {
+      alert('❌ Error al actualizar el estado: ' + err.message);
     }
   };
 
@@ -144,12 +157,14 @@ function ProductosAdmin({ onUpdate }) {
   return (
     <div className="productos-admin">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Gestión de Productos</h1>
+        <h3>Gestión de Productos</h3>
         <Button variant="success" onClick={() => handleShowModal()}>
           ➕ Nuevo Producto
         </Button>
       </div>
+
       {error && <Alert variant="danger">{error}</Alert>}
+
       <div className="table-responsive">
         <Table striped bordered hover>
           <thead>
@@ -183,13 +198,16 @@ function ProductosAdmin({ onUpdate }) {
                     </Badge>
                   </td>
                   <td>
+                    {producto.destacado ? '⭐' : '—'}
+                  </td>
+                  <td>
                     <Button 
                       size="sm" 
                       variant="info" 
                       className="me-2"
                       onClick={() => handleShowModal(producto)}
                     >
-                    Editar
+                      ✏️ Editar
                     </Button>
                     <Button 
                       size="sm" 
@@ -306,6 +324,7 @@ function ProductosAdmin({ onUpdate }) {
                 onChange={handleChange}
               />
             </Form.Group>
+
             <div className="d-flex justify-content-end gap-2">
               <Button variant="secondary" onClick={handleCloseModal}>
                 Cancelar

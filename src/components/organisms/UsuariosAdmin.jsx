@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Alert, Spinner, Badge } from 'react-bootstrap';
-import { usuariosAPI } from '../../../data/api';
+import { usuariosAPI } from '../../data/api';
 
 function UsuariosAdmin({ onUpdate }) {
   const [usuarios, setUsuarios] = useState([]);
@@ -83,22 +83,24 @@ function UsuariosAdmin({ onUpdate }) {
         activo: formData.activo,
         fechaRegistro: editingUsuario?.fechaRegistro || new Date().toISOString().split('T')[0]
       };
+
       if (!editingUsuario || formData.contrasena) {
         usuarioData.contrasena = formData.contrasena;
       }
+
       if (editingUsuario) {
         await usuariosAPI.update(editingUsuario.id, usuarioData);
-        alert('Usuario actualizado correctamente');
+        alert('✅ Usuario actualizado correctamente');
       } else {
         await usuariosAPI.register(usuarioData);
-        alert('Usuario creado correctamente');
+        alert('✅ Usuario creado correctamente');
       }
 
       handleCloseModal();
       loadUsuarios();
       if (onUpdate) onUpdate();
     } catch (err) {
-      alert('Error al guardar el usuario: ' + err.message);
+      alert('❌ Error al guardar el usuario: ' + err.message);
       console.error(err);
     }
   };
@@ -107,13 +109,14 @@ function UsuariosAdmin({ onUpdate }) {
     if (!window.confirm('¿Estás seguro de eliminar este usuario?')) {
       return;
     }
+
     try {
       await usuariosAPI.delete(id);
-      alert('Usuario eliminado correctamente');
+      alert('✅ Usuario eliminado correctamente');
       loadUsuarios();
       if (onUpdate) onUpdate();
     } catch (err) {
-      alert('Error al eliminar el usuario: ' + err.message);
+      alert('❌ Error al eliminar el usuario: ' + err.message);
       console.error(err);
     }
   };
@@ -127,9 +130,10 @@ function UsuariosAdmin({ onUpdate }) {
       loadUsuarios();
       if (onUpdate) onUpdate();
     } catch (err) {
-      alert('Error al actualizar el estado: ' + err.message);
+      alert('❌ Error al actualizar el estado: ' + err.message);
     }
   };
+
   if (loading) {
     return (
       <div className="text-center py-5">
@@ -142,12 +146,14 @@ function UsuariosAdmin({ onUpdate }) {
   return (
     <div className="usuarios-admin">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Gestión de Usuarios</h1>
+        <h3>Gestión de Usuarios</h3>
         <Button variant="success" onClick={() => handleShowModal()}>
-          Nuevo Usuario
+          ➕ Nuevo Usuario
         </Button>
       </div>
+
       {error && <Alert variant="danger">{error}</Alert>}
+
       <div className="table-responsive">
         <Table striped bordered hover>
           <thead>
@@ -190,20 +196,24 @@ function UsuariosAdmin({ onUpdate }) {
                       size="sm" 
                       variant="info" 
                       className="me-2"
-                      onClick={() => handleShowModal(usuario)}>
-                      Editar
+                      onClick={() => handleShowModal(usuario)}
+                    >
+                      ✏️ Editar
                     </Button>
                     <Button 
                       size="sm" 
                       variant={usuario.activo ? 'warning' : 'success'}
                       className="me-2"
-                      onClick={() => toggleActivo(usuario)}>
+                      onClick={() => toggleActivo(usuario)}
+                    >
                       {usuario.activo ? '🔒' : '🔓'}
                     </Button>
                     <Button 
                       size="sm" 
                       variant="danger"
-                      onClick={() => handleDelete(usuario.id)}>
+                      onClick={() => handleDelete(usuario.id)}
+                    >
+                      🗑️
                     </Button>
                   </td>
                 </tr>
@@ -212,10 +222,11 @@ function UsuariosAdmin({ onUpdate }) {
           </tbody>
         </Table>
       </div>
+
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {editingUsuario ? 'Editar Usuario' : 'Nuevo Usuario'}
+            {editingUsuario ? '✏️ Editar Usuario' : '➕ Nuevo Usuario'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -227,9 +238,11 @@ function UsuariosAdmin({ onUpdate }) {
                 name="nombre"
                 value={formData.nombre}
                 onChange={handleChange}
-                required placeholder="Juan Pérez"
+                required
+                placeholder="Juan Pérez"
               />
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Correo Electrónico *</Form.Label>
               <Form.Control
@@ -237,9 +250,11 @@ function UsuariosAdmin({ onUpdate }) {
                 name="correo"
                 value={formData.correo}
                 onChange={handleChange}
-                required placeholder="usuario@ejemplo.com"
+                required
+                placeholder="usuario@ejemplo.com"
               />
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>
                 Contraseña {editingUsuario ? '(dejar vacío para no cambiar)' : '*'}
@@ -253,6 +268,7 @@ function UsuariosAdmin({ onUpdate }) {
                 placeholder="••••••••"
               />
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Check
                 type="checkbox"
@@ -262,6 +278,7 @@ function UsuariosAdmin({ onUpdate }) {
                 onChange={handleChange}
               />
             </Form.Group>
+
             <div className="d-flex justify-content-end gap-2">
               <Button variant="secondary" onClick={handleCloseModal}>
                 Cancelar

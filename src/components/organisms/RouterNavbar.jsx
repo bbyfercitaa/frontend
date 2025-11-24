@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import ProtectedRoute from '../components/ProtectedRoute';
+import ProtectedRoute from '../organisms/ProtectedRoute';
 import Home from '../../pages/Home';
 import Nosotros from '../../pages/Nosotros';
 import Contactos from '../../pages/Contactos';
@@ -46,7 +46,14 @@ const RouterNavbar = () => {
           </ProtectedRoute>
         } 
       />
-      <Route path="/mis-listas" element={<MisListas />} />
+      <Route 
+        path="/mis-listas" 
+        element={
+          <ProtectedRoute requireAuth={true}>
+            <MisListas />
+          </ProtectedRoute>
+        } 
+      />
       <Route 
         path="/listas/:id" 
         element={

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Tabs, Tab } from 'react-bootstrap';
-import { useAuth } from '../../context/AuthContext';
-import { productosAPI, usuariosAPI } from '../../data/api';
-import ProductosAdmin from '../organisms/admin/ProductosAdmin';
-import UsuariosAdmin from '../organisms/admin/UsuariosAdmin';
-import CategoriasAdmin from '../organisms/admin/CategoriasAdmin';
-import '../../styles/pages/AdminDashboard.css';
+import { Container, Row, Col, Card, Tabs, Tab } from 'react-bootstrap';
+import { useAuth } from '../context/AuthContext';
+import { productosAPI, usuariosAPI } from '../data/api';
+import ProductosAdmin from '../components/organisms/ProductosAdmin';
+import UsuariosAdmin from '../components/organisms/UsuariosAdmin';
+import CategoriasAdmin from '../components/organisms/CategoriasAdmin';
+import '../styles/pages/AdminDashboard.css';
 
 function AdminDashboard() {
   const { user } = useAuth();
@@ -48,17 +48,19 @@ function AdminDashboard() {
         <Row className="mb-4">
           <Col>
             <h1 className="admin-title">
-              Panel de Administración
+              🎯 Panel de Administración
             </h1>
             <p className="text-muted">
               Bienvenido, <strong>{user?.nombre}</strong>
             </p>
           </Col>
         </Row>
+
         <Row className="mb-4">
           <Col md={3} sm={6} className="mb-3">
             <Card className="stat-card stat-card-primary">
               <Card.Body>
+                <div className="stat-icon">📦</div>
                 <h2 className="stat-number">{stats.totalProductos}</h2>
                 <p className="stat-label">Total Productos</p>
               </Card.Body>
@@ -67,6 +69,7 @@ function AdminDashboard() {
           <Col md={3} sm={6} className="mb-3">
             <Card className="stat-card stat-card-success">
               <Card.Body>
+                <div className="stat-icon">✅</div>
                 <h3 className="stat-number">{stats.productosActivos}</h3>
                 <p className="stat-label">Productos Activos</p>
               </Card.Body>
@@ -75,6 +78,7 @@ function AdminDashboard() {
           <Col md={3} sm={6} className="mb-3">
             <Card className="stat-card stat-card-info">
               <Card.Body>
+                <div className="stat-icon">👥</div>
                 <h4 className="stat-number">{stats.totalUsuarios}</h4>
                 <p className="stat-label">Total Usuarios</p>
               </Card.Body>
@@ -83,24 +87,26 @@ function AdminDashboard() {
           <Col md={3} sm={6} className="mb-3">
             <Card className="stat-card stat-card-warning">
               <Card.Body>
+                <div className="stat-icon">👤</div>
                 <h5 className="stat-number">{stats.usuariosActivos}</h5>
                 <p className="stat-label">Usuarios Activos</p>
               </Card.Body>
             </Card>
           </Col>
         </Row>
+
         <Row>
           <Col>
             <Card className="admin-content-card">
               <Card.Body>
                 <Tabs defaultActiveKey="productos" className="mb-3" variant="pills">
-                  <Tab eventKey="productos" title="Productos">
+                  <Tab eventKey="productos" title="📦 Productos">
                     <ProductosAdmin onUpdate={loadStats} />
                   </Tab>
-                  <Tab eventKey="usuarios" title="Usuarios">
+                  <Tab eventKey="usuarios" title="👥 Usuarios">
                     <UsuariosAdmin onUpdate={loadStats} />
                   </Tab>
-                  <Tab eventKey="categorias" title="Categorías">
+                  <Tab eventKey="categorias" title="🏷️ Categorías">
                     <CategoriasAdmin />
                   </Tab>
                 </Tabs>
