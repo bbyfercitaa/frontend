@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://queledoy-backend-7ejz.onrender.com/api/v1';
+
 const api = axios.create({ 
   baseURL: API_BASE, 
   timeout: 10000,
@@ -18,10 +19,43 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// AUTH API
+// Interceptor para manejar errores
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
+// AUTH API - Endpoints de autenticación
 export const authAPI = {
-  register: (payload) => api.post('/auth/register', payload).then(r => r.data),
-  login: (payload) => api.post('/auth/login', payload).then(r => r.data),
+  register: async (payload) => {
+    try {
+      const response = await api.post('/usuarios', {
+        nombre: payload.nombre,
+        correo: payload.correo,
+        contrasena: payload.contrasena,
+        activo: true,
+        fechaRegistro: new Date().toISOString().split('T')[0]
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al registrar usuario');
+    }
+  },
+  
+  login: async (payload) => {
+    try {
+      const response = await api.post('/usuarios/login', {
+        correo: payload.correo,
+        contrasena: payload.contrasena
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Error al iniciar sesión');
+    }
+  }
 };
 
 // PRODUCTOS API
@@ -37,7 +71,7 @@ export const productosAPI = {
 export const usuariosAPI = {
   getAll: () => api.get('/usuarios').then(r => r.data),
   getById: (id) => api.get(`/usuarios/${id}`).then(r => r.data),
-  register: (payload) => api.post('/usuarios', payload).then(r => r.data),
+  register: (payload) => authAPI.register(payload),
   update: (id, payload) => api.put(`/usuarios/${id}`, payload).then(r => r.data),
   delete: (id) => api.delete(`/usuarios/${id}`).then(r => r.data),
   login: (payload) => authAPI.login(payload),
