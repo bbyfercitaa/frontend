@@ -32,6 +32,7 @@ api.interceptors.response.use(
 export const authAPI = {
   register: async (payload) => {
     try {
+      console.log('Enviando registro a:', `${API_BASE}/usuarios`);
       const response = await api.post('/usuarios', {
         nombre: payload.nombre,
         correo: payload.correo,
@@ -39,9 +40,11 @@ export const authAPI = {
         activo: true,
         fechaRegistro: new Date().toISOString().split('T')[0]
       });
+      console.log('Usuario registrado exitosamente:', response.data);
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Error al registrar usuario');
+      console.error('Error en registro:', error.response?.data || error.message);
+      throw new Error(error.response?.data?.message || error.message || 'Error al registrar usuario');
     }
   },
   
@@ -99,4 +102,8 @@ export const categoriasAPI = {
   delete: (id) => api.delete(`/categorias/${id}`).then(r => r.data),
 };
 
+<<<<<<< HEAD
 export default api;
+=======
+export default api;
+>>>>>>> e4be2f698735db8b108ad73ffcf901ab71f0ed0b

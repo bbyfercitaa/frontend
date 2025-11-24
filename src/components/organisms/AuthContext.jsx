@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { usuariosAPI } from '../data/api';
+import { usuariosAPI } from '../../data/api';
 
 const AuthContext = createContext(null);
 
@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (datosUsuario) => {
     setLoading(true);
     setError(null);
+<<<<<<< HEAD
     try {
       const payload = {
         nombre_usuario: datosUsuario.nombre,
@@ -86,6 +87,31 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       const errorMsg = err.message || 'Error al registrarse';
       setError(errorMsg);
+=======
+    
+    try {
+      console.log('Registrando usuario:', datosUsuario);
+      const response = await usuariosAPI.register(datosUsuario);
+      console.log('Respuesta del registro:', response);
+      
+      const userData = {
+        id: response.id,
+        nombre: response.nombre,
+        correo: response.correo,
+        rol: response.rol
+      };
+
+      sessionStorage.setItem('user', JSON.stringify(userData));
+      sessionStorage.setItem('token', response.token || 'usuario-' + response.id);
+      
+      setUser(userData);
+      return { success: true };
+      
+    } catch (err) {
+      const errorMsg = err.message || 'Error al registrarse';
+      setError(errorMsg);
+      console.error('Error en registro:', err);
+>>>>>>> e4be2f698735db8b108ad73ffcf901ab71f0ed0b
       return { success: false, error: errorMsg };
     } finally {
       setLoading(false);
@@ -129,4 +155,8 @@ export const useAuth = () => {
   return context;
 };
 
+<<<<<<< HEAD
 export default AuthContext;
+=======
+export default AuthContext;
+>>>>>>> e4be2f698735db8b108ad73ffcf901ab71f0ed0b
